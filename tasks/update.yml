@@ -1,5 +1,5 @@
 ---
-- name: Ensure all packages are up to date
+- name: S'assurer que tous les paquets sont à jour
   ansible.builtin.yum:
     name: '*'
     state: latest
