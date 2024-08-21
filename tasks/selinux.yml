@@ -4,7 +4,7 @@
     path: /etc/selinux/config
     regexp: '^SELINUX='
     line: 'SELINUX=enforcing'
-  # Définit SELinux en mode enforcing
+  # Définit SELinux en mode enforcin
 
 - name: Apply SELinux policy
   ansible.builtin.command:
