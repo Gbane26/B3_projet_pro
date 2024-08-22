@@ -1,0 +1,17 @@
+---
+# Déjà verifier
+- name: Add a cron job to check for package updates
+  ansible.builtin.cron:
+    name: "Check for package updates"
+    minute: "0"
+    hour: "3"
+    job: "/usr/bin/dnf check-update >> /var/log/dnf-update.log 2>&1"
+  # Configure une tâche cron pour vérifier les mises à jour des paquets tous les jours à 3h du matin
+
+- name: Add a cron job for security audit
+  ansible.builtin.cron:
+    name: "Run security audit"
+    minute: "0"
+    hour: "3"
+    job: "/usr/bin/auditctl -l >> /var/log/audit.log 2>&1"
+  # Configure une tâche cron pour exécuter une vérification de sécurité tous les jours à

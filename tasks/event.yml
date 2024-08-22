@@ -1,0 +1,21 @@
+---
+- name: Ensure auditd is installed
+  ansible.builtin.yum:
+    name: audit
+    state: present
+  # Assure que le paquet audit est installé
+
+- name: Start and enable auditd
+  ansible.builtin.systemd:
+    name: auditd
+    enabled: yes
+    state: started
+  # Démarre et active le service auditd
+
+- name: Ensure audit logs are configured
+  ansible.builtin.lineinfile:
+    path: /etc/audit/auditd.conf
+    regexp: '^max_log_file'
+    line: 'max_log_file = 50'
+  # Configure la taille maximale du fichier journal
+

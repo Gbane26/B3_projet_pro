@@ -1,0 +1,36 @@
+---
+- name: Main playbook
+  hosts: alma9
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Include tasks from checkconnexion.yml
+      include_tasks: tasks/checkconnexion.yml
+    - name: Update system packages
+      include_tasks: tasks/update.yml
+    - name: Disable unnecessary services
+      include_tasks: tasks/services.yml
+    - name: Configure firewall with firewalld
+      include_tasks: tasks/parefeu.yml
+    - name: Configure password policy
+      include_tasks: tasks/password.yml
+    - name: Disable inactive user accounts
+      include_tasks: tasks/disable.yml
+    - name: Configure SSH settings
+      include_tasks: tasks/ssh.yml
+    - name: Enable SELinux
+      include_tasks: tasks/selinux.yml
+    - name: Configure security logging
+      include_tasks: tasks/event.yml
+    - name: Configure file permissions
+      include_tasks: tasks/permission.yml
+    - name: Configure cron jobs for security checks
+      include_tasks: tasks/cron.yml
+    - name: Configure Advanced System Security Settings
+      include_tasks: tasks/security_system.yml
+    - name: Install and Configure AIDE (Advanced Intrusion Detection Environment)
+      include_tasks: tasks/aide.yml
+
+
+
+    

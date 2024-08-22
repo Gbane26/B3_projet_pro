@@ -1,0 +1,23 @@
+---
+- name: Ensure firewalld is installed
+  ansible.builtin.yum:
+    name: firewalld
+    state: present
+  # Assure que firewalld est installé
+
+- name: Start and enable firewalld
+  ansible.builtin.systemd:
+    name: firewalld
+    enabled: yes
+    state: started
+  # Démarre et active firewalld au démarrage
+
+- name: Allow SSH and HTTP services
+  ansible.builtin.firewalld:
+    service: "{{ item }}"
+    permanent: yes
+    state: enabled
+  loop:
+    - ssh
+    - http
+  # Autorise les services SSH et HTTP

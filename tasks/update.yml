@@ -1,0 +1,6 @@
+---
+- name: Ensure all packages are up to date
+  ansible.builtin.yum:
+    name: '*'
+    state: latest
+  # Met à jour tous les paquets à la dernière version

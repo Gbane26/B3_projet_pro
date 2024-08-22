@@ -1,0 +1,17 @@
+---
+
+- name: Set permissions for /etc/passwd
+  ansible.builtin.file:
+    path: /etc/passwd
+    owner: root
+    group: root
+    mode: '0644'
+  # Définit les permissions pour /etc/passwd
+
+- name: Set permissions for /etc/shadow
+  ansible.builtin.file:
+    path: /etc/shadow
+    owner: root
+    group: root
+    mode: '0600'
+  # Définit les permissions pour /etc/shadow

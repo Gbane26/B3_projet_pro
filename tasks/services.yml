@@ -1,0 +1,15 @@
+---
+
+- name: Ensure the chronyd service is disabled
+  ansible.builtin.systemd:
+    name: chronyd
+    enabled: no
+    state: stopped
+  # Désactive le service chronyd, qui est un serveur NTP
+
+- name: Ensure the cups service is disabled
+  ansible.builtin.systemd:
+    name: cups
+    enabled: no
+    state: stopped
+  # Désactive le service CUPS (impression), si non nécessaire

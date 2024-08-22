@@ -1,0 +1,324 @@
+
+Bien sûr ! Voici 10 playbooks Ansible pour durcir AlmaLinux 9 en suivant les recommandations générales de sécurité, avec des commentaires pour chaque playbook pour expliquer ce qu'ils font :
+
+1. Désactiver les services inutiles
+Objectif : Désactiver les services qui ne sont pas nécessaires pour réduire la surface d'attaque.
+
+yaml
+Copier le code
+---
+- name: Disable unnecessary services
+  hosts: all
+  tasks:
+    - name: Ensure the chronyd service is disabled
+      ansible.builtin.systemd:
+        name: chronyd
+        enabled: no
+        state: stopped
+      # Désactive le service chronyd, qui est un serveur NTP
+
+    - name: Ensure the cups service is disabled
+      ansible.builtin.systemd:
+        name: cups
+        enabled: no
+        state: stopped
+      # Désactive le service CUPS (impression), si non nécessaire
+2. Configurer le pare-feu avec firewalld
+Objectif : Configurer le pare-feu pour permettre uniquement les connexions nécessaires.
+
+yaml
+Copier le code
+---
+- name: Configure firewall with firewalld
+  hosts: all
+  tasks:
+    - name: Ensure firewalld is installed
+      ansible.builtin.yum:
+        name: firewalld
+        state: present
+      # Assure que firewalld est installé
+
+    - name: Start and enable firewalld
+      ansible.builtin.systemd:
+        name: firewalld
+        enabled: yes
+        state: started
+      # Démarre et active firewalld au démarrage
+
+    - name: Allow SSH and HTTP services
+      ansible.builtin.firewalld:
+        service: "{{ item }}"
+        permanent: yes
+        state: enabled
+      loop:
+        - ssh
+        - http
+      # Autorise les services SSH et HTTP
+3. Configurer la politique de mot de passe
+Objectif : Renforcer la politique de mot de passe pour assurer des mots de passe forts.
+
+yaml
+Copier le code
+---
+- name: Configure password policy
+  hosts: all
+  tasks:
+    - name: Set password expiration to 90 days
+      ansible.builtin.lineinfile:
+        path: /etc/login.defs
+        regexp: '^PASS_MAX_DAYS'
+        line: 'PASS_MAX_DAYS   90'
+      # Définit l'expiration des mots de passe à 90 jours
+
+    - name: Set minimum password length to 12 characters
+      ansible.builtin.lineinfile:
+        path: /etc/security/pwquality.conf
+        regexp: '^minlen'
+        line: 'minlen = 12'
+      # Définit la longueur minimale du mot de passe à 12 caractères
+4. Désactiver les comptes utilisateurs inactifs
+Objectif : Désactiver les comptes utilisateurs qui ne sont plus utilisés.
+
+yaml
+Copier le code
+---
+- name: Disable inactive user accounts
+  hosts: all
+  tasks:
+    - name: Find and disable inactive accounts
+      ansible.builtin.shell: |
+        for user in $(awk -F: '$7 ~ /^\/sbin\/nologin/ { print $1 }' /etc/passwd); do
+          usermod -L $user
+        done
+      # Désactive les comptes utilisateurs qui ont /sbin/nologin comme shell
+5. Configurer les paramètres de SSH
+Objectif : Renforcer la sécurité des connexions SSH.
+
+yaml
+Copier le code
+---
+- name: Configure SSH settings
+  hosts: all
+  tasks:
+    - name: Ensure SSH root login is disabled
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PermitRootLogin'
+        line: 'PermitRootLogin no'
+      # Désactive la connexion root via SSH
+
+    - name: Ensure SSH password authentication is disabled
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PasswordAuthentication'
+        line: 'PasswordAuthentication no'
+      # Désactive l'authentification par mot de passe SSH
+6. Mettre à jour les paquets du système
+Objectif : S'assurer que tous les paquets sont à jour pour bénéficier des dernières corrections de sécurité.
+
+yaml
+Copier le code
+---
+- name: Update system packages
+  hosts: all
+  tasks:
+    - name: Ensure all packages are up to date
+      ansible.builtin.yum:
+        name: '*'
+        state: latest
+      # Met à jour tous les paquets à la dernière version
+7. Activer le SELinux
+Objectif : Activer SELinux pour renforcer la sécurité.
+
+yaml
+Copier le code
+---
+- name: Enable SELinux
+  hosts: all
+  tasks:
+    - name: Ensure SELinux is in enforcing mode
+      ansible.builtin.lineinfile:
+        path: /etc/selinux/config
+        regexp: '^SELINUX='
+        line: 'SELINUX=enforcing'
+      # Définit SELinux en mode enforcing
+
+    - name: Apply SELinux policy
+      ansible.builtin.command:
+        cmd: setenforce 1
+      # Applique immédiatement la politique SELinux
+8. Configurer la journalisation des événements de sécurité
+Objectif : Configurer la journalisation pour surveiller les événements de sécurité.
+
+yaml
+Copier le code
+---
+- name: Configure security logging
+  hosts: all
+  tasks:
+    - name: Ensure auditd is installed
+      ansible.builtin.yum:
+        name: audit
+        state: present
+      # Assure que le paquet audit est installé
+
+    - name: Start and enable auditd
+      ansible.builtin.systemd:
+        name: auditd
+        enabled: yes
+        state: started
+      # Démarre et active le service auditd
+
+    - name: Ensure audit logs are configured
+      ansible.builtin.lineinfile:
+        path: /etc/audit/auditd.conf
+        regexp: '^max_log_file'
+        line: 'max_log_file = 50'
+      # Configure la taille maximale du fichier journal
+9. Configurer les permissions des fichiers sensibles
+Objectif : Assurer que les fichiers sensibles ont les permissions appropriées.
+
+yaml
+Copier le code
+---
+- name: Configure file permissions
+  hosts: all
+  tasks:
+    - name: Set permissions for /etc/passwd
+      ansible.builtin.file:
+        path: /etc/passwd
+        owner: root
+        group: root
+        mode: '0644'
+      # Définit les permissions pour /etc/passwd
+
+    - name: Set permissions for /etc/shadow
+      ansible.builtin.file:
+        path: /etc/shadow
+        owner: root
+        group: root
+        mode: '0600'
+      # Définit les permissions pour /etc/shadow
+10. Configurer le cron pour surveiller les changements
+Objectif : Utiliser cron pour exécuter des vérifications régulières de sécurité.
+
+yaml
+Copier le code
+---
+- name: Configure cron jobs for security checks
+  hosts: all
+  tasks:
+    - name: Add a cron job to check for package updates
+      ansible.builtin.cron:
+        name: "Check for package updates"
+        minute: "0"
+        hour: "3"
+        job: "/usr/bin/dnf check-update >> /var/log/dnf-update.log 2>&1"
+      # Configure une tâche cron pour vérifier les mises à jour des paquets tous les jours à 3h du matin
+
+    - name: Add a cron job for security audit
+      ansible.builtin.cron:
+        name: "Run security audit"
+        minute: "30"
+        hour: "2"
+        job: "/usr/bin/auditctl -l >> /var/log/audit.log 2>&1"
+      # Configure une tâche cron pour exécuter une vérification de sécurité tous les jours à
+
+11. Renforcement de la Sécurité SSH et Configuration des Politiques de Sécurité
+Ce playbook renforce la sécurité du service SSH et configure des politiques de sécurité pour le système.
+
+yaml
+Copier le code
+---
+
+- name: Ensure kernel parameters are set
+  ansible.builtin.sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+    reload: yes
+  loop:
+    - { key: 'net.ipv4.ip_forward', value: '0' }          # Désactive le forwarding IP pour éviter le routage non autorisé
+    - { key: 'net.ipv4.conf.all.rp_filter', value: '1' }  # Active la vérification des paquets pour éviter les attaques par usurpation d'adresse IP
+    - { key: 'net.ipv4.conf.default.rp_filter', value: '1' }
+    - { key: 'net.ipv4.conf.all.accept_source_route', value: '0' } # Désactive le routage source pour éviter les attaques par routage
+    - { key: 'net.ipv4.conf.default.accept_source_route', value: '0' }
+    - { key: 'kernel.randomize_va_space', value: '2' }      # Active la randomisation de l'espace d'adresses pour renforcer la sécurité contre les attaques de type buffer overflow
+  # Modifie les paramètres du noyau pour améliorer la sécurité réseau et la protection contre les attaques
+
+- name: Disable unwanted kernel modules
+  ansible.builtin.lineinfile:
+    path: /etc/modprobe.d/blacklist.conf
+    line: "blacklist {{ item }}"
+    create: yes
+  loop:
+    - ipv6          # Désactive le module IPv6 si non utilisé pour réduire la surface d'attaque
+    - floppy        # Désactive le module floppy pour des systèmes qui ne nécessitent pas de lecteur de disquettes
+  # Ajoute des modules du noyau à la liste noire pour les désactiver
+
+- name: Ensure auditd is installed
+  ansible.builtin.yum:
+    name: audit
+    state: present
+  # Assure que le paquet auditd est installé
+
+- name: Configure auditd rules for security
+  ansible.builtin.copy:
+    dest: /etc/audit/rules.d/99-security.rules
+    content: |
+      -w /etc/passwd -p wa -k passwd_changes
+      -w /etc/shadow -p wa -k shadow_changes
+      -w /etc/group -p wa -k group_changes
+      -w /etc/sudoers -p wa -k sudoers_changes
+      -w /var/log/ -p wa -k log_changes
+    mode: '0644'
+  # Configure des règles d'audit pour surveiller les changements dans les fichiers critiques et les journaux
+
+
+
+
+
+  ---
+
+- name: Ensure kernel parameters are set
+  ansible.builtin.sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+    reload: yes
+  loop:
+    - { key: 'net.ipv4.ip_forward', value: '0' }          # Désactive le forwarding IP pour éviter le routage non autorisé
+    - { key: 'net.ipv4.conf.all.rp_filter', value: '1' }  # Active la vérification des paquets pour éviter les attaques par usurpation d'adresse IP
+    - { key: 'net.ipv4.conf.default.rp_filter', value: '1' }
+    - { key: 'net.ipv4.conf.all.accept_source_route', value: '0' } # Désactive le routage source pour éviter les attaques par routage
+    - { key: 'net.ipv4.conf.default.accept_source_route', value: '0' }
+    - { key: 'kernel.randomize_va_space', value: '2' }      # Active la randomisation de l'espace d'adresses pour renforcer la sécurité contre les attaques de type buffer overflow
+  # Modifie les paramètres du noyau pour améliorer la sécurité réseau et la protection contre les attaques
+
+- name: Disable unwanted kernel modules
+  ansible.builtin.lineinfile:
+    path: /etc/modprobe.d/blacklist.conf
+    line: "blacklist {{ item }}"
+    create: yes
+  loop:
+    - ipv6          # Désactive le module IPv6 si non utilisé pour réduire la surface d'attaque
+    - floppy        # Désactive le module floppy pour des systèmes qui ne nécessitent pas de lecteur de disquettes
+  # Ajoute des modules du noyau à la liste noire pour les désactiver
+
+- name: Ensure auditd is installed
+  ansible.builtin.yum:
+    name: audit
+    state: present
+  # Assure que le paquet auditd est installé
+
+- name: Configure auditd rules for security
+  ansible.builtin.copy:
+    dest: /etc/audit/rules.d/99-security.rules
+    content: |
+      -w /etc/passwd -p wa -k passwd_changes
+      -w /etc/shadow -p wa -k shadow_changes
+      -w /etc/group -p wa -k group_changes
+      -w /etc/sudoers -p wa -k sudoers_changes
+      -w /var/log/ -p wa -k log_changes
+    mode: '0644'
+  # Configure des règles d'audit pour surveiller les changements dans les fichiers critiques et les journaux

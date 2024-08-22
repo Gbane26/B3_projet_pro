@@ -1,0 +1,44 @@
+---
+
+- name: Ensure kernel parameters are set
+  ansible.builtin.sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+    reload: yes
+  loop:
+    - { key: 'net.ipv4.ip_forward', value: '0' }          # Désactive le forwarding IP pour éviter le routage non autorisé
+    - { key: 'net.ipv4.conf.all.rp_filter', value: '1' }  # Active la vérification des paquets pour éviter les attaques par usurpation d'adresse IP
+    - { key: 'net.ipv4.conf.default.rp_filter', value: '1' }
+    - { key: 'net.ipv4.conf.all.accept_source_route', value: '0' } # Désactive le routage source pour éviter les attaques par routage
+    - { key: 'net.ipv4.conf.default.accept_source_route', value: '0' }
+    - { key: 'kernel.randomize_va_space', value: '2' }      # Active la randomisation de l'espace d'adresses pour renforcer la sécurité contre les attaques de type buffer overflow
+  # Modifie les paramètres du noyau pour améliorer la sécurité réseau et la protection contre les attaques
+
+- name: Disable unwanted kernel modules
+  ansible.builtin.lineinfile:
+    path: /etc/modprobe.d/blacklist.conf
+    line: "blacklist {{ item }}"
+    create: yes
+  loop:
+    - ipv6          # Désactive le module IPv6 si non utilisé pour réduire la surface d'attaque
+    - floppy        # Désactive le module floppy pour des systèmes qui ne nécessitent pas de lecteur de disquettes
+  # Ajoute des modules du noyau à la liste noire pour les désactiver
+
+- name: Ensure auditd is installed
+  ansible.builtin.yum:
+    name: audit
+    state: present
+  # Assure que le paquet auditd est installé
+
+- name: Configure auditd rules for security
+  ansible.builtin.copy:
+    dest: /etc/audit/rules.d/99-security.rules
+    content: |
+      -w /etc/passwd -p wa -k passwd_changes
+      -w /etc/shadow -p wa -k shadow_changes
+      -w /etc/group -p wa -k group_changes
+      -w /etc/sudoers -p wa -k sudoers_changes
+      -w /var/log/ -p wa -k log_changes
+    mode: '0644'
+  # Configure des règles d'audit pour surveiller les changements dans les fichiers critiques et les journaux

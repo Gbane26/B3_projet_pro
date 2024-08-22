@@ -1,0 +1,12 @@
+---
+- name: Ensure SELinux is in enforcing mode
+  ansible.builtin.lineinfile:
+    path: /etc/selinux/config
+    regexp: '^SELINUX='
+    line: 'SELINUX=enforcing'
+  # Définit SELinux en mode enforcing
+
+- name: Apply SELinux policy
+  ansible.builtin.command:
+    cmd: setenforce 1
+  # Applique immédiatement la politique SELinux

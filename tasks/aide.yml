@@ -1,0 +1,58 @@
+---
+## Déjà tester
+- name: Ensure AIDE is installed
+  ansible.builtin.yum:
+    name: aide
+    state: present
+  # Assure que le paquet aide est installé
+
+- name: Initialize AIDE database
+  ansible.builtin.command:
+    cmd: aide --init
+    creates: /var/lib/aide/aide.db.gz
+  # Initialise la base de données aide si elle n'existe pas encore
+
+- name: Move the initial AIDE database to its proper location
+  ansible.builtin.command:
+    cmd: mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+    creates: /var/lib/aide/aide.db.gz
+  # Déplace la base de données initiale d'aide au bon emplacement après l'initialisation
+
+- name: Create AIDE configuration directory
+  ansible.builtin.file:
+    path: /etc/aide
+    state: directory
+    mode: '0755'
+- name: Ensure AIDE configuration file exists
+  ansible.builtin.copy:
+    dest: /etc/aide/aide.conf
+    content: |
+      # AIDE configuration file
+      database = /var/lib/aide/aide.db.gz
+      database_out = /var/lib/aide/aide.db.new.gz
+      logfile = /var/log/aide/aide.log
+      # Define the directories and files to monitor
+      /bin    p+i+n+u+g+s+b+m+c+e+M+S+L+X
+      /sbin   p+i+n+u+g+s+b+m+c+e+M+S+L+X
+      /usr/bin p+i+n+u+g+s+b+m+c+e+M+S+L+X
+      /usr/sbin p+i+n+u+g+s+b+m+c+e+M+S+L+X
+      /etc    p+i+n+u+g+s+b+m+c+e+M+S+L+X
+      /var/log p+i+n+u+g+s+b+m+c+e+M+S+L+X
+    mode: '0644'
+  # Crée le fichier de configuration aide avec des paramètres de surveillance pour les fichiers et répertoires critiques
+
+- name: Create directory for AIDE logs
+  ansible.builtin.file:
+    path: /var/log/aide
+    state: directory
+    mode: '0755'
+  # Crée un répertoire pour stocker les journaux d'aide
+
+- name: Ensure AIDE cron job is configured
+  ansible.builtin.cron:
+    name: "Run AIDE daily"
+    minute: "0"
+    hour: "3"
+    job: "/usr/sbin/aide --check >> /var/log/aide/aide.log 2>&1"
+    state: present
+  # Configure une tâche cron pour exécuter aide tous les jours à 2h du matin et enregistrer les résultats dans les journaux
