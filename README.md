@@ -4,7 +4,7 @@ Membre du groupe :
 - Ahamadou Yaya GBANE
 - Soumaila COULIBALY
 - Serigne Saliou SECK
-- El Schua KHAHITOM
+- El Schua KLAHITOM
 
 
 ## Usage
