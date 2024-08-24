@@ -203,7 +203,7 @@ Avant de commencer, assurez-vous que les éléments suivants sont disponibles :
 1. **Exécuter le Playbook** :
    - Une fois tous les fichiers configurés, vous pouvez exécuter le playbook pour sécuriser vos serveurs AlmaLinux :
      ```bash
-     ansible-playbook -i inventory.ini main.yml
+     ansible-playbook -i inventory main.yml
      ```
 
 ### 4. Vérification de l'Installation
