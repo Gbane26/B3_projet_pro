@@ -4,8 +4,6 @@
   gather_facts: no
   become: yes
   tasks:
-    - name: Include tasks from checkconnexion.yml
-      include_tasks: tasks/checkconnexion.yml
     - name: Update system packages
       include_tasks: tasks/update.yml
     - name: Disable unnecessary services

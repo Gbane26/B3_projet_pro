@@ -122,8 +122,6 @@ Avant de commencer, assurez-vous que les éléments suivants sont disponibles :
        gather_facts: no
        become: yes
        tasks:
-         - name: Include tasks from checkconnexion.yml
-           include_tasks: tasks/checkconnexion.yml
          - name: Update system packages
            include_tasks: tasks/update.yml
          - name: Disable unnecessary services
@@ -155,14 +153,16 @@ Avant de commencer, assurez-vous que les éléments suivants sont disponibles :
      ```bash
      mkdir -p tasks
      ```
-   - Ajoutez ensuite les fichiers de tâches dans ce répertoire. Par exemple, pour `checkconnexion.yml`, créez un fichier `tasks/checkconnexion.yml` :
+   - Ajoutez ensuite les fichiers de tâches dans ce répertoire. Par exemple, pour `update.yml`, créez un fichier `tasks/update.yml` :
      ```yaml
-     ---
-     - name: Check if the server is reachable
-       ping:
+   ---
+    - name: Ensure all packages are up to date
+      ansible.builtin.yum:
+        name: '*'
+        state: latest
      ```
 
-   - Répétez cette étape pour tous les fichiers de tâches mentionnés dans le playbook principal (`update.yml`, `services.yml`, etc.).
+   - Répétez cette étape pour tous les fichiers de tâches mentionnés dans le playbook principal (`aide.yml`, `services.yml`, etc.).
 
 ### 3. Exécution du Playbook
 
