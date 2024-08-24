@@ -1,4 +1,4 @@
-# Projet Ansible Mastodon 
+# Projet Annuel : Durcissement de l'OS AlmaLinux9 via recommendations ANNSSI
 
 Membre du groupe : 
 - Ahamadou Yaya GBANE
@@ -6,40 +6,6 @@ Membre du groupe :
 - Serigne Saliou SECK
 - El Schua KLAHITOM
 
-
-## Usage
-
-```
-ansible-playbook main.yml
-```
-Comment l'utiliser : 
-
-- Etape 1 : Mettre en place un environmment (machines) avec    acces ssh sans mot de pass
-                
-
-- Etape 2 : déploiement "principal" : 
-                  ansible-playbook main.yml
-
-## Notes
-
-Dans ce projet vous avez plusieurs roles
-
-- update : Pour les mise à jour  
-- ssh : Pour la configuration de POSTGRESQL
-- selinux : YARN et NODEJS 
-- parefeu : Pour Installation de Ruby
-- permission
-- event : Pour Configuration de nginx
-
-
-
-## Fichier inventory 
-
-Pour l'inventory on a decidé de le faire sur une seule machine;
-
-```
-alma-infra1 ansible_host=XX.XX.XX.12
-```
 
 # Sécurisation des Serveurs AlmaLinux avec Ansible
 
