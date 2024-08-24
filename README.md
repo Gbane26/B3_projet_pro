@@ -155,11 +155,11 @@ Avant de commencer, assurez-vous que les éléments suivants sont disponibles :
      ```
    - Ajoutez ensuite les fichiers de tâches dans ce répertoire. Par exemple, pour `update.yml`, créez un fichier `tasks/update.yml` :
      ```yaml
-   ---
-    - name: Ensure all packages are up to date
-      ansible.builtin.yum:
-        name: '*'
-        state: latest
+     ---
+     - name: Ensure all packages are up to date
+       ansible.builtin.yum:
+         name: '*'
+         state: latest
      ```
 
    - Répétez cette étape pour tous les fichiers de tâches mentionnés dans le playbook principal (`aide.yml`, `services.yml`, etc.).
