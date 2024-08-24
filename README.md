@@ -33,27 +33,6 @@ Dans ce projet vous avez plusieurs roles
 
 
 
-## Difficultés rencontrés 
-
-- Lors de la création d'un utilisateur postgres dans le role postgresql ; Utilisateur non privilégié
-
-- Ruby : non Idempotents
-
-- connexion refusée lors des telechargement de fichier en ligne 
-
-```
-#Exemple 
-
-- name: Ajouter clé Yarnpkg
-  get_url:
-    url: https://dl.yarnpkg.com/debian/pubkey.gpg
-    dest: /etc/apt/trusted.gpg.d/yarnpkg.asc
-  when: ansible_os_family == "Debian"
-
-```
-Tant tot get_url passe tant tot il refuse alors que rien a été modifié a son niveau 
-
-
 ## Fichier inventory 
 
 Pour l'inventory on a decidé de le faire sur une seule machine;
@@ -142,7 +121,7 @@ Avant de commencer, assurez-vous que les éléments suivants sont disponibles :
 2. **Accès SSH** : Assurez-vous que vous avez un accès SSH fonctionnel aux serveurs AlmaLinux que vous souhaitez sécuriser. Vous devrez configurer vos clés SSH pour un accès sans mot de passe.
    - Pour ajouter une clé SSH à un serveur :
      ```bash
-     ssh-copy-id -i ~/.ssh/id_rsa.pub momo@10.0.0.1
+     ssh-copy-id -i ~/.ssh/id_rsa.pub user@XX.XX.XX.11
      ```
 
 3. **Serveurs AlmaLinux** : Identifiez les adresses IP ou les noms d’hôte des serveurs AlmaLinux cibles et regroupez-les sous le groupe `alma9` dans votre inventaire Ansible.
@@ -169,7 +148,7 @@ Avant de commencer, assurez-vous que les éléments suivants sont disponibles :
 ### 2. Création du Playbook Ansible
 
 1. **Créer le Playbook Principal** :
-   - Créez un fichier `secure-almalinux.yml` contenant les instructions pour sécuriser vos serveurs :
+   - Créez un fichier `main.yml` contenant les instructions pour sécuriser vos serveurs :
      ```yaml
      ---
      - name: Sécurisation des serveurs AlmaLinux
@@ -224,7 +203,7 @@ Avant de commencer, assurez-vous que les éléments suivants sont disponibles :
 1. **Exécuter le Playbook** :
    - Une fois tous les fichiers configurés, vous pouvez exécuter le playbook pour sécuriser vos serveurs AlmaLinux :
      ```bash
-     ansible-playbook -i inventory.ini secure-almalinux.yml
+     ansible-playbook -i inventory.ini main.yml
      ```
 
 ### 4. Vérification de l'Installation
