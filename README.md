@@ -133,16 +133,16 @@ Avant de commencer, assurez-vous que les éléments suivants sont disponibles :
 1. **Créer le Répertoire du Projet** :
    - Créez un répertoire pour votre playbook Ansible et naviguez dans ce répertoire :
      ```bash
-     mkdir -p ~/ansible/playbooks/secure-almalinux
-     cd ~/ansible/playbooks/secure-almalinux
+     mkdir -p ~/B3_projet_pro
+     cd ~/B3_projet_pro
      ```
 
 2. **Créer le Fichier d'Inventaire** :
    - Créez un fichier `inventory.ini` dans le répertoire du projet, qui listera les serveurs AlmaLinux à sécuriser :
      ```ini
      [alma9]
-     10.0.0.1 ansible_user=momo ansible_ssh_private_key_file=~/.ssh/id_rsa
-     10.0.0.2 ansible_user=momo ansible_ssh_private_key_file=~/.ssh/id_rsa
+     AlmaLinux9-server ansible_host=XX.XX.XX.11
+     AlmaLinux9-server ansible_host=XX.XX.XX.12
      ```
 
 ### 2. Création du Playbook Ansible
