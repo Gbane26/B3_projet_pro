@@ -125,7 +125,7 @@ Ce playbook Ansible est conçu pour sécuriser des serveurs AlmaLinux. Il exécu
 |  - aide.yml              |
 +-------------------------+
 
-
+```
 
 # Installation et Test de la Solution de Sécurisation des Serveurs AlmaLinux
 
