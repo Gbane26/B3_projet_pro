@@ -1,3 +1,3 @@
 [alma9]
-AlmaLinux9-server ansible_host=10.42.42.6
-AlmaLinux9-server2 ansible_host=10.42.42.7
+AlmaLinux9-server ansible_host=10.45.45.11
+

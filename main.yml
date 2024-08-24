@@ -1,5 +1,5 @@
 ---
-- name: Main playbook
+- name: Sécurisation des serveurs AlmaLinux
   hosts: alma9
   gather_facts: no
   become: yes
