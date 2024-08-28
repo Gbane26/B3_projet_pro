@@ -1,29 +1,29 @@
 ---
 
-- name: Ensure AIDE is installed
+- name: Assurez-vous que aide est installer.
   ansible.builtin.yum:
     name: aide
     state: present
-  # Assure que le paquet aide est installé
+  # Assure que le paquet aide est installer
 
-- name: Initialize AIDE database
+- name: Initialisez la base de données de aide
   ansible.builtin.command:
     cmd: aide --init
     creates: /var/lib/aide/aide.db.gz
   # Initialise la base de données aide si elle n'existe pas encore
 
-- name: Move the initial AIDE database to its proper location
+- name: Déplacez la base de données initiale aide vers son emplacement approprié
   ansible.builtin.command:
     cmd: mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
     creates: /var/lib/aide/aide.db.gz
   # Déplace la base de données initiale d'aide au bon emplacement après l'initialisation
 
-- name: Create AIDE configuration directory
+- name: Créez le répertoire de configuration aide
   ansible.builtin.file:
     path: /etc/aide
     state: directory
     mode: '0755'
-- name: Ensure AIDE configuration file exists
+- name: Assurez-vous que le fichier de configuration aide existe.
   ansible.builtin.copy:
     dest: /etc/aide/aide.conf
     content: |
@@ -41,14 +41,14 @@
     mode: '0644'
   # Crée le fichier de configuration aide avec des paramètres de surveillance pour les fichiers et répertoires critiques
 
-- name: Create directory for AIDE logs
+- name: Créez le répertoire pour les journaux aide
   ansible.builtin.file:
     path: /var/log/aide
     state: directory
     mode: '0755'
   # Crée un répertoire pour stocker les journaux d'aide
 
-- name: Ensure AIDE cron job is configured
+- name: Assurez-vous que la tâche cron aide est configurée.
   ansible.builtin.cron:
     name: "Run AIDE daily"
     minute: "0"
