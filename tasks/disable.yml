@@ -1,7 +1,6 @@
 ---
-- name: Find and disable inactive accounts
+- name: Désactive les comptes utilisateurs qui ont /sbin/nologin comme shell
   ansible.builtin.shell: |
     for user in $(awk -F: '$7 ~ /^\/sbin\/nologin/ { print $1 }' /etc/passwd); do
       usermod -L $user
     done
-  # Désactive les comptes utilisateurs qui ont /sbin/nologin comme shell
