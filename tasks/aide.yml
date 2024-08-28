@@ -1,35 +1,29 @@
 ---
 
-- name: Assurez-vous que aide est installer.
 - name: Assure que le paquet aide est installé
   ansible.builtin.yum:
     name: aide
     state: present
+  # Assure que le paquet aide est installé
 
-  # Assure que le paquet aide est installer
-
-- name: Initialisez la base de données de aide
 - name: Initialise la base de données aide si elle n'existe pas encore
   ansible.builtin.command:
     cmd: aide --init
     creates: /var/lib/aide/aide.db.gz
 
-
-- name: Déplacez la base de données initiale aide vers son emplacement approprié
 - name: Déplace la base de données initiale d'aide au bon emplacement après l'initialisation
   ansible.builtin.command:
     cmd: mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
     creates: /var/lib/aide/aide.db.gz
 
 
-- name: Créez le répertoire de configuration aide
+- name: Create AIDE configuration directory
   ansible.builtin.file:
     path: /etc/aide
     state: directory
     mode: '0755'
-- name: Assurez-vous que le fichier de configuration aide existe.
 
-- name: Ensure AIDE configuration file exists
+- name: Crée le fichier de configuration aide avec des paramètres de surveillance pour les fichiers et répertoires critiques
   ansible.builtin.copy:
     dest: /etc/aide/aide.conf
     content: |
@@ -45,17 +39,15 @@
       /etc    p+i+n+u+g+s+b+m+c+e+M+S+L+X
       /var/log p+i+n+u+g+s+b+m+c+e+M+S+L+X
     mode: '0644'
-  # Crée le fichier de configuration aide avec des paramètres de surveillance pour les fichiers et répertoires critiques
 
-- name: Créez le répertoire pour les journaux aide
+
 - name: Crée un répertoire pour stocker les journaux d'aide
   ansible.builtin.file:
     path: /var/log/aide
     state: directory
     mode: '0755'
-  # Crée un répertoire pour stocker les journaux d'aide
 
-- name: Assurez-vous que la tâche cron aide est configurée.
+
 - name: Configure une tâche cron pour exécuter aide tous les jours à 3h du matin et enregistrer les résultats dans les journaux
   ansible.builtin.cron:
     name: "Run AIDE daily"
