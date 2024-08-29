@@ -12,6 +12,8 @@
     - { key: 'net.ipv4.conf.all.accept_source_route', value: '0' } # Désactive le routage source pour éviter les attaques par routage
     - { key: 'net.ipv4.conf.default.accept_source_route', value: '0' }
     - { key: 'kernel.randomize_va_space', value: '2' }      # Active la randomisation de l'espace d'adresses pour renforcer la sécurité contre les attaques de type buffer overflow
+    - { key: 'net.ipv6.conf.all.disable_ipv6', value: '1' }     # Désactive IPv6 au niveau global
+    - { key: 'net.ipv6.conf.default.disable_ipv6', value: '1' } # Désactive IPv6 pour les interfaces par défaut
   # Modifie les paramètres du noyau pour améliorer la sécurité réseau et la protection contre les attaques
 
 - name: Désactiver les modules du noyau indésirables
@@ -23,6 +25,13 @@
     - ipv6          # Désactive le module IPv6 si non utilisé pour réduire la surface d'attaque
     - floppy        # Désactive le module floppy pour des systèmes qui ne nécessitent pas de lecteur de disquettes
   # Ajoute des modules du noyau à la liste noire pour les désactiver
+
+- name: Désactiver le chargement automatique du module IPv6
+  ansible.builtin.lineinfile:
+    path: /etc/modprobe.d/blacklist-ipv6.conf
+    line: 'install ipv6 /bin/true'
+    create: yes
+  # Empêche explicitement le chargement automatique du module IPv6
 
 - name: S'assurer que auditd est installé
   ansible.builtin.yum:
