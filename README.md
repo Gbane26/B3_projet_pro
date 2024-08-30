@@ -59,14 +59,14 @@ Ce playbook Ansible est conçu pour sécuriser des serveurs AlmaLinux. Il exécu
 |  - mise à jour.yml       |
 |  - services.yml          |
 |  - parefeu.yml           |
-|  - password.yml          |
+|  - mot de passe .yml     |
 |  - Désactivation .yml    |
 |  - ssh.yml               |
 |  - selinux.yml           |
-|  - évenement.yml             |
+|  - évenement.yml         |
 |  - permission.yml        |
 |  - cron.yml              |
-|  - security_system.yml   |
+|  - securite_systeme.yml  |
 |  - aide.yml              |
 +-------------------------+
 
