@@ -55,18 +55,18 @@ Ce playbook Ansible est conçu pour sécuriser des serveurs AlmaLinux. Il exécu
              v
 +-------------------------+
 |  Fichiers de Tâches      |
-|                          |
-|  - mise à jour.yml       |
+|  - checkconnexion.yml    |
+|  - update.yml            |
 |  - services.yml          |
 |  - parefeu.yml           |
-|  - mot de passe .yml     |
-|  - Désactivation .yml    |
+|  - password.yml          |
+|  - disable.yml           |
 |  - ssh.yml               |
 |  - selinux.yml           |
-|  - évenement.yml         |
+|  - event.yml             |
 |  - permission.yml        |
 |  - cron.yml              |
-|  - securite_systeme.yml  |
+|  - security_system.yml   |
 |  - aide.yml              |
 +-------------------------+
 
@@ -116,40 +116,39 @@ Avant de commencer, assurez-vous que les éléments suivants sont disponibles :
 1. **Créer le Playbook Principal** :
    - Créez un fichier `main.yml` contenant les instructions pour sécuriser vos serveurs :
      ```yaml
----
+     ---
      - name: Sécurisation des serveurs AlmaLinux
        hosts: alma9
        gather_facts: no
        become: yes
        tasks:
-         - name: Mettre à jour les paquets système
+         - name: Update system packages
            include_tasks: tasks/update.yml
-         - name: Désactiver les services inutiles
+         - name: Disable unnecessary services
            include_tasks: tasks/services.yml
-         - name: Configurer le pare-feu avec firewalld
+         - name: Configure firewall with firewalld
            include_tasks: tasks/parefeu.yml
-         - name: Configurer la politique de mot de passe
+         - name: Configure password policy
            include_tasks: tasks/password.yml
-         - name: Désactiver les comptes utilisateurs inactifs
+         - name: Disable inactive user accounts
            include_tasks: tasks/disable.yml
-         - name: Configurer les paramètres SSH
+         - name: Configure SSH settings
            include_tasks: tasks/ssh.yml
-         - name: Activer SELinux
+         - name: Enable SELinux
            include_tasks: tasks/selinux.yml
-         - name: Configurer la journalisation de sécurité
+         - name: Configure security logging
            include_tasks: tasks/event.yml
-         - name: Configurer les permissions des fichiers
+         - name: Configure file permissions
            include_tasks: tasks/permission.yml
-         - name: Configurer les tâches cron pour les vérifications de sécurité
+         - name: Configure cron jobs for security checks
            include_tasks: tasks/cron.yml
-         - name: Configurer les paramètres avancés de sécurité du système
+         - name: Configure Advanced System Security Settings
            include_tasks: tasks/security_system.yml
-         - name: Installer et configurer AIDE (Environnement de Détection d'Intrusion Avancé)
+         - name: Install and Configure AIDE (Advanced Intrusion Detection Environment)
            include_tasks: tasks/aide.yml
-
      ```
 
-2. **Créer les Fichiers de Tâches ou Tasks** :
+2. **Créer les Fichiers de Tâches** :
    - Dans le répertoire du projet, créez un sous-répertoire nommé `tasks` :
      ```bash
      mkdir -p tasks
@@ -157,7 +156,7 @@ Avant de commencer, assurez-vous que les éléments suivants sont disponibles :
    - Ajoutez ensuite les fichiers de tâches dans ce répertoire. Par exemple, pour `update.yml`, créez un fichier `tasks/update.yml` :
      ```yaml
      ---
-     - name: Vérifie que tous les paquets sont à jour
+     - name: Ensure all packages are up to date
        ansible.builtin.yum:
          name: '*'
          state: latest
