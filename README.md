@@ -117,35 +117,35 @@ Avant de commencer, assurez-vous que les éléments suivants sont disponibles :
    - Créez un fichier `main.yml` contenant les instructions pour sécuriser vos serveurs :
      ```yaml
 ---
-- name: Sécurisation des serveurs AlmaLinux
-  hosts: alma9
-  gather_facts: no
-  become: yes
-  tasks:
-    - name: Mettre à jour les paquets système
-      include_tasks: tasks/update.yml
-    - name: Désactiver les services inutiles
-      include_tasks: tasks/services.yml
-    - name: Configurer le pare-feu avec firewalld
-      include_tasks: tasks/parefeu.yml
-    - name: Configurer la politique de mot de passe
-      include_tasks: tasks/password.yml
-    - name: Désactiver les comptes utilisateurs inactifs
-      include_tasks: tasks/disable.yml
-    - name: Configurer les paramètres SSH
-      include_tasks: tasks/ssh.yml
-    - name: Activer SELinux
-      include_tasks: tasks/selinux.yml
-    - name: Configurer la journalisation de sécurité
-      include_tasks: tasks/event.yml
-    - name: Configurer les permissions des fichiers
-      include_tasks: tasks/permission.yml
-    - name: Configurer les tâches cron pour les vérifications de sécurité
-      include_tasks: tasks/cron.yml
-    - name: Configurer les paramètres avancés de sécurité du système
-      include_tasks: tasks/security_system.yml
-    - name: Installer et configurer AIDE (Environnement de Détection d'Intrusion Avancé)
-      include_tasks: tasks/aide.yml
+  - name: Sécurisation des serveurs AlmaLinux
+    hosts: alma9
+    gather_facts: no
+    become: yes
+    tasks:
+      - name: Mettre à jour les paquets système
+        include_tasks: tasks/update.yml
+      - name: Désactiver les services inutiles
+        include_tasks: tasks/services.yml
+      - name: Configurer le pare-feu avec firewalld
+        include_tasks: tasks/parefeu.yml
+      - name: Configurer la politique de mot de passe
+        include_tasks: tasks/password.yml
+      - name: Désactiver les comptes utilisateurs inactifs
+        include_tasks: tasks/disable.yml
+      - name: Configurer les paramètres SSH
+        include_tasks: tasks/ssh.yml
+      - name: Activer SELinux
+        include_tasks: tasks/selinux.yml
+      - name: Configurer la journalisation de sécurité
+        include_tasks: tasks/event.yml
+      - name: Configurer les permissions des fichiers
+        include_tasks: tasks/permission.yml
+      - name: Configurer les tâches cron pour les vérifications de sécurité
+        include_tasks: tasks/cron.yml
+      - name: Configurer les paramètres avancés de sécurité du système
+        include_tasks: tasks/security_system.yml
+      - name: Installer et configurer AIDE (Environnement de Détection d'Intrusion Avancé)
+        include_tasks: tasks/aide.yml
 
      ```
 
