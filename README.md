@@ -122,29 +122,29 @@ Avant de commencer, assurez-vous que les éléments suivants sont disponibles :
        gather_facts: no
        become: yes
        tasks:
-         - name: Update system packages
+         - name: Mettre à jour les paquets système
            include_tasks: tasks/update.yml
-         - name: Disable unnecessary services
+         - name: Désactiver les services inutiles
            include_tasks: tasks/services.yml
-         - name: Configure firewall with firewalld
+         - name: Configurer le pare-feu avec firewalld
            include_tasks: tasks/parefeu.yml
-         - name: Configure password policy
+         - name: Configurer la politique de mot de passe
            include_tasks: tasks/password.yml
-         - name: Disable inactive user accounts
+         - name: Désactiver les comptes utilisateurs inactifs
            include_tasks: tasks/disable.yml
-         - name: Configure SSH settings
+         - name: Configurer les paramètres SSH
            include_tasks: tasks/ssh.yml
-         - name: Enable SELinux
+         - name: Activer SELinux
            include_tasks: tasks/selinux.yml
-         - name: Configure security logging
+         - name: Configurer la journalisation de sécurité
            include_tasks: tasks/event.yml
-         - name: Configure file permissions
+         - name: Configurer les permissions des fichiers
            include_tasks: tasks/permission.yml
-         - name: Configure cron jobs for security checks
+         - name: Configurer les tâches cron pour les vérifications de sécurité
            include_tasks: tasks/cron.yml
-         - name: Configure Advanced System Security Settings
+         - name: Configurer les paramètres avancés de sécurité du système
            include_tasks: tasks/security_system.yml
-         - name: Install and Configure AIDE (Advanced Intrusion Detection Environment)
+         - name: Installer et configurer AIDE (Environnement de Détection d'Intrusion Avancé)
            include_tasks: tasks/aide.yml
 
      ```
