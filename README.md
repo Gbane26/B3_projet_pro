@@ -186,6 +186,10 @@ Avant de commencer, assurez-vous que les éléments suivants sont disponibles :
 - Pour ajouter de nouvelles configurations ou ajuster celles existantes, modifiez les fichiers de tâches correspondants dans le répertoire `tasks` puis réexécutez le playbook.
 - Pour une mise à jour régulière des serveurs, vous pouvez intégrer ce playbook dans un pipeline d’intégration continue (CI) ou l’exécuter périodiquement via un cron job sur votre machine de contrôle.
 
+### 6. Lien vidéo
+
+- https://drive.google.com/file/d/1mafsXINxeRG3jLlYpK1ipUrIUJfZmKpO/view?usp=sharing
+
 ## Conclusion
 
 Ce guide vous a montré comment installer et tester un playbook Ansible conçu pour sécuriser des serveurs AlmaLinux. Grâce à sa structure modulaire, ce playbook est facile à maintenir et à étendre, offrant une solution robuste pour la gestion de la sécurité sur vos serveurs.
